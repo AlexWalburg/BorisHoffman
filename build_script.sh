@@ -29,6 +29,7 @@ module load gcc/8.3.0
 module load cuda/11.7
 module load python/3.9.6
 echo 'make + make install'
+make configure arch=70
 make compile -j 12
 make install
 
