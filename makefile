@@ -5,6 +5,7 @@
 #arch=70 for Volta (and Turing)
 #arch=80 for Ampere
 #example: $ make configure arch=70
+arch=70
 ifndef arch
 	arch = $(file < arch.txt)
 endif
