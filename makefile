@@ -31,6 +31,7 @@ OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_CPP_FILES))
 SRC_CU_FILES := $(wildcard $(SRC_DIR)/*.cu)
 CUOBJ_FILES := $(patsubst $(SRC_DIR)/%.cu,$(CUOBJ_DIR)/%.o,$(SRC_CU_FILES))
 
+
 .PHONY: clean
 clean: 
 	rm -f $(OBJ_FILES) $(CUOBJ_FILES) BorisLin
@@ -63,7 +64,7 @@ compile: $(OBJ_FILES) $(CUOBJ_FILES)
   
 install:
 	nvcc -arch=sm_$(arch) -dlink -w $(CUOBJ_DIR)/*.o -o $(CUOBJ_DIR)/rdc_link.o 
-	g++ $(OBJ_DIR)/*.o $(CUOBJ_DIR)/*.o -fopenmp -lpython3.8 -ltbb -lfftw3 -lX11 -lcudart -lcufft -lcudadevrt -o BorisLin
+	g++ $(OBJ_DIR)/*.o $(CUOBJ_DIR)/*.o -fopenmp -L/u/local/apps/python/3.9.6/gcc-4.8.5/lib -lpython3.9 -L/u/local/cuda/11.7/lib64/ -ltbb -lfftw3 -lX11 -lcudart -lcufft -lcudadevrt -o BorisLin
 	#rm -f $(OBJ_FILES) $(CUOBJ_FILES) $(CUOBJ_DIR)/rdc_link.o
 	mkdir -p ~/Documents/$(BORIS_DATA_DIR)
 	mkdir -p ~/Documents/$(BORIS_SIM_DIR)
@@ -75,7 +76,7 @@ install:
  
 #for python3.8 make sure to get dev version : sudo apt-get install python3.8-dev
 Boris/Boris_o/%.o: Boris/%.cpp
-	g++ -c -Ofast -std=c++17 -I/usr/include/python3.8/ -IBorisLib -IBorisCUDALib -fopenmp $< -o $@
+	g++ -c -Ofast -std=c++17 -I/u/local/cuda/11.7/include -I/usr/include/python3.6m/ -IBorisLib -IBorisCUDALib -fopenmp $< -o $@
 
 Boris/Boris_cuo/%.o: Boris/%.cu
 	nvcc -rdc=true -c -std=c++14 -IBorisLib -IBorisCUDALib -w -arch=sm_$(arch) $< -o $@
